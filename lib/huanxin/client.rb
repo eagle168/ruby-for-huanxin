@@ -1,6 +1,6 @@
 require 'httparty'
-require 'huanxin/group' 
-require 'huanxin/chat_room' 
+require ::File.expand_path('../group' ,  __FILE__)
+require ::File.expand_path('../chat_room' ,  __FILE__)
 
 module Huanxin 
 
@@ -30,6 +30,7 @@ module Huanxin
       if result.response.code.to_i == 200
         return [username, password] 
       else
+        puts result.response.body.yellow
         nil
       end
     end

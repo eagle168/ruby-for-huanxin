@@ -11,10 +11,10 @@ module Huanxin
           :body => body.to_json,
           :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
 
-
       if result.response.code.to_i == 200
         return result["data"]["groupid"] 
       else
+        puts result.response.body.yellow
         nil
       end 
     end 
@@ -32,6 +32,7 @@ module Huanxin
       if result.response.code.to_i == 200
         return result["data"]  #maxusers, groupname, description
       else
+        puts result.response.body.yellow
         nil
       end 
     end
@@ -41,10 +42,10 @@ module Huanxin
 
       result = HTTParty.get("#{@head_url}/chatgroups/#{group_id}", 
           :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
-
       if result.response.code.to_i == 200
         return result["data"][0] 
       else
+        puts result.response.body.yellow
         nil
       end 
     end 
@@ -59,6 +60,21 @@ module Huanxin
       if result.response.code.to_i == 200
         return [result["data"]["groupid"], result["data"]["success"]]
       else
+        puts result.response.body.yellow
+        nil
+      end 
+    end
+    
+    #获取群组所有成员
+    def group_users(group_id)
+      token = self.auth_token()
+
+      result = HTTParty.get("#{@head_url}/chatgroups/#{group_id}/users", 
+          :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
+      if result.response.code.to_i == 200
+        return result["data"]
+      else
+        puts result.response.body.yellow
         nil
       end 
     end
