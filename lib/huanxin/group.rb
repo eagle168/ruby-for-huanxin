@@ -78,6 +78,20 @@ module Huanxin
         nil
       end 
     end
+    
+    #加入群组
+    def group_add_user(group_id, username)
+      token = self.auth_token()
+
+      result = HTTParty.post("#{@head_url}/chatgroups/#{group_id}/users/#{username}", 
+          :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
+      if result.response.code.to_i == 200
+        return result["data"]
+      else
+        puts result.response.body.yellow
+        nil
+      end 
+    end
 
   end 
 end
