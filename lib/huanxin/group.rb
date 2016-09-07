@@ -94,13 +94,39 @@ module Huanxin
     end
 
     #send message to group
+    def group_send_cmd(group_id, action)
+      token = self.auth_token()
+
+      result = HTTParty.post("#{@head_url}/messages", 
+          :body    => {target_type: "chatgroups",
+                       target: [group_id],
+                       msg: {
+                         type: "cmd",
+                         action: action,
+                       },
+                       from: "admin"}.to_json,
+          :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
+
+      if result.response.code.to_i == 200
+        return result["data"]
+      else
+        puts result.response.body.yellow
+        nil
+      end 
+    end
+
+
+    #send message to group
     def group_send_message(group_id, content)
       token = self.auth_token()
 
-      result = HTTParty.post("#{@head_url}/#{@org_name}/#{@app_name}/messages", 
+      result = HTTParty.post("#{@head_url}/messages", 
           :body    => {target_type: "chatgroups",
                        target: [group_id],
-                       msg: content,
+                       msg: {
+                         type: "txt",
+                         msg: content,
+                       },
                        from: "admin"}.to_json,
           :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
 
