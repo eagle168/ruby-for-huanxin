@@ -111,6 +111,7 @@ module Huanxin
         return result["data"]
       else
         puts result.response.body.yellow
+        puts @head_url.red
         nil
       end 
     end
