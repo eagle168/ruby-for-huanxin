@@ -139,5 +139,37 @@ module Huanxin
       end 
     end
 
-  end 
+
+    #get groups by username
+    def groups_by_username(username)
+      token = self.auth_token()
+
+      result = HTTParty.get("#{@head_url}/users/#{username}/joined_chatgroups",
+          :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
+
+      if result.response.code.to_i == 200
+        return result["data"]
+      else
+        puts result.response.body.yellow
+        nil
+      end 
+    end
+
+    #delete user from group
+    def remove_member_from_group(group_id, username)
+      token = self.auth_token()
+
+      result = HTTParty.delete("#{@head_url}/chatgroups/#{group_id}/users/#{username}",
+          :headers => { 'Content-Type' => 'application/json', 'Authorization'=>"Bearer #{token}" } )
+
+      if result.response.code.to_i == 200
+        return result["data"]
+      else
+        puts result.response.body.yellow
+        nil
+      end
+    end
+
+
+  end
 end
